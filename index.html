@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Guild Wars 2 - Legendary Hunt</title>
+        <!-- Bootstrap Core CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="css/legendary.css" rel="stylesheet">
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
+        <script type="text/javascript">
+            window.cookieconsent_options = {"message":"This website uses cookies only to save your API-Keys on your Computer. Nothing else. Nothing to be worried about :)","dismiss":"OK.","learnMore":"","link":null,"theme":"light-floating"};
+        </script>
+        <script type="text/javascript" src="//s3.amazonaws.com/cc.silktide.com/cookieconsent.latest.min.js"></script>
+        <!-- End Cookie Consent plugin -->
+    </head>
+    
+    <body>
+        <img id="blur" src="img/blur.png" />
+        <div id="logo">
+            <img src="img/w.png" />
+        </div>
+        <!-- Page Content -->
+        <div class="container" id="legendary-selection">
+            <!-- Page Heading -->
+            <div class="row headline">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Legendary
+                        <small>Select yours</small>
+                    </h1>
+                    <input type="text" class=" form-control pull-right" id="legendary-filter" autocomplete="off" placeholder="Filter">
+                </div>
+            </div>
+            <!-- /.row -->
+            <div id="legendary-selection-container"></div>
+            <!-- Footer -->
+        </div>
+        <div class="container" id="account-selection">
+            <!-- Page Heading -->
+            <div class="row headline">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        <a href="javascript:backToLegendarySelection()"><span class=" glyphicon glyphicon-chevron-left"></span></a>Account
+                        <small>Please insert your API key or select an account</small>
+                    </h1>
+                </div>
+            </div>
+            <div id="account-desc">
+                <div class="alert alert-info" role="alert">You will need an GuildWars2 API-Key to use this site.
+                    <br />In order to create such a key, you have to log in to your account at
+                    <a href="http://account.guildwars2.com">account.guildwars2.com</a>. Head to the "API Keys" page within your account page. This is where you can add a new API key.
+                    <br />You have to give the following set of permissions to the key:
+                    <span class="badge">account</span>,
+                    <span class="badge">inventories</span>,
+                    <span class="badge">characters</span>
+                </div>
+            </div>
+            <!-- /.row -->
+            <div id="account-selection-container">
+                <div class="row">
+                    <div class="col-md-12 form-group  has-feedback" id="container-add-account">
+                        <div class="input-group">
+                            <span class="input-group-addon">Add new account:</span>
+                            <input autocomplete="off" id="input-add-account" type="text" class="form-control" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX">
+                            <span class="input-group-btn">
+                                <button id="button-add-account" class="btn btn-success disabled " type="button">Add Key</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-group" id="account-list"></div>
+                <small id="account-cookie-notification">The API-Keys will be saved in a cookie on your computer. No data is transmitted to any server that does not belong to Arenanet.
+                    Keys are only used for API-Requests.</small>
+            </div>
+            <!-- Footer -->
+        </div>
+        <div class="container" id="legendary-progress">
+            <!-- Page Heading -->
+            <div class="row headline">
+                <div class="col-lg-12">
+                    <h1 class="page-header">
+                        <a href="javascript:backToAccountSelection()"><span class=" glyphicon glyphicon-chevron-left"></span></a>Your progress
+                        <small id="legendary-name-headline"></small>
+                    </h1>
+                    <div class="input-group pull-right" id="group-shortlink">
+                        <input type="text" id="shortlink" class="form-control" placeholder="Click 'Create shortlink' on the right!">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" id="create-shortlink" type="button">
+                                <span class="glyphicon glyphicon-link"></span>Create shortlink</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div id="legendary-progressbar-messages"></div>
+            <div id="legendary-progressbar-loading">
+                <div class="progress">
+                    <div id="legendary-progressbar-loading-progress" class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                    aria-valuenow="0" data-current="0" aria-valuemin="0" aria-valuemax="32" style="width: 0%"></div>
+                </div>
+            </div>
+            <div id="legendary-recipe"></div>
+        </div>
+        <div class="container">
+            <footer>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <p>&copy; Werdes &#64; github - images from
+                            <a href="http://wiki.guildwars2.com/">wiki.guildwars2.com</a>
+                        </p>
+                        <p>
+                            <small>Guild Wars Copyright and Trademark Information © 2012
+                                <br />ArenaNet, Inc. All rights reserved. NCsoft, the interlocking NC logo, ArenaNet, Arena.net, Guild Wars, Guild Wars Factions,
+                                Factions, Guild Wars Nightfall, Nightfall, Guild Wars: Eye of the North, Eye of the North, Guild Wars 2, and all associated
+                                logos and designs are trademarks or registered trademarks of NCsoft Corporation. All other trademarks are the property of
+                                their respective owners.</small>
+                        </p>
+                    </div>
+                </div>
+                <!-- /.row -->
+            </footer>
+        </div>
+        <div class="modal fade" id="modal-delete-account">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">Remove account</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            <b>Do you really want to delete the account "<span id="modal-delete-account-accountname"></span>" from the accountlist?</b>
+                            <br />
+                            <span class="glyphicon glyphicon-link"></span>
+                            <span id="modal-delete-account-token"></span>
+                            <small>(
+                                <span id="modal-delete-account-tokenname"></span>)</small>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="modal-delete-account-submit">Yes, remove this account</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+        <!-- /.container -->
+        <!-- jQuery -->
+        <script src="js/jquery.js"></script>
+        <!-- Bootstrap Core JavaScript -->
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/jquery.averagecolor.js"></script>
+        <script src="js/jquery.sticky.js"></script>
+        <script src="js/legendary.js"></script>
+    </body>
+
+</html>
